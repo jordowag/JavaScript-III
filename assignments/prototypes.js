@@ -136,3 +136,102 @@ Humanoid.prototype.greet = function(){
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+  function Hero(heroAttrs){
+    Humanoid.call(this, heroAttrs);
+    this.element = heroAttrs.element;
+    this.weakness = heroAttrs.weakness;
+  }
+
+  Hero.prototype = Object.create(Humanoid.prototype);
+  Hero.prototype.attack = function(enemy){
+    if (enemy.minions > 0) {
+      enemy.minions--;
+      console.log(`Defeated ${enemy.name}'s minion! He has ${enemy.minions} left.`);
+    } else {
+      let damage = Math.floor(Math.random()*5);
+      enemy.healthPoints -= damage;
+      console.log(`No minions left! ${enemy.name} has taken ${damage} damage. He has ${enemy.healthPoints} left.`);
+      if (enemy.healthPoints <= 0) {
+        console.log(enemy.destroy());
+      }
+    }
+  };
+
+  function Villain(villAttrs){
+    Humanoid.call(this, villAttrs);
+    this.minions = villAttrs.minions;
+    this.element = villAttrs.element;
+  }
+
+
+  Villain.prototype = Object.create(Humanoid.prototype);
+
+  Villain.prototype.attack = function(enemy){
+    let damage = Math.floor(Math.random()*10);
+    if (this.element == enemy.weakness) {
+      damage = damage * 1.2;
+    }
+    enemy.healthPoints -= damage;
+    console.log(`${enemy.name} has taken ${damage} damage. He has ${enemy.healthPoints} left.`);
+    if(enemy.healthPoints <= 0) {
+      console.log(enemy.destroy());
+    }
+  };
+
+  let megaman = new Hero(
+    {
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 2,
+    },
+    healthPoints: 30,
+    name: 'Mega Man',
+    team: 'Robots',
+    weapons: [
+      'Mega Buster',
+      'Ice Shot'
+    ],
+    language: 'English',
+    element: 'Air',
+    weakness: 'Fire'
+    }  
+  );
+
+  let darthVader = new Villain(
+    {
+      createdAt: new Date(),
+      dimensions: {
+        length: 1,
+        width: 2,
+        height: 5,
+      },
+      healthPoints: 12,
+      name: 'Darth Vader',
+      team: 'Sith Lords',
+      weapons: [
+        'LightSaber',
+        'Force'
+      ],
+      language: 'English',
+      minions: 2,
+      element: 'Fire'
+    }  
+  );
+
+  megaman.attack(darthVader);
+  darthVader.attack(megaman);
+  megaman.attack(darthVader);
+  darthVader.attack(megaman);
+  megaman.attack(darthVader);
+  darthVader.attack(megaman);
+  megaman.attack(darthVader);
+  darthVader.attack(megaman);
+  megaman.attack(darthVader);
+  darthVader.attack(megaman);
+  megaman.attack(darthVader);
+  darthVader.attack(megaman);
+  megaman.attack(darthVader);
+  darthVader.attack(megaman);
